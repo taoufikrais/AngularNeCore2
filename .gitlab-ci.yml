@@ -1,0 +1,28 @@
+stages:
+  - build
+
+variables:
+  SLN_FILENAME: "WebApplication9.sln"
+  APP_NAME: "WebApplication9"                     # Utilisé pour labelliser le container Docker exécutant l'application
+  DOCKER_IMAGE_NAME: "WebApplication9"
+  DOCKER_IMAGE_TITLE: "Portail WebApplication9"
+  URL_PREFIX: "WebApplication9"                  # Sample usage : http://$URL_PREFIX.dalkia.net -> http://kyoto.dalkia.net
+  
+  # Set the following variable to "True" if you want to deploy to a IIS server instead of a Docker environment.
+  USE_LEGACY_DEPLOYMENT: "False"
+  IIS_SITE_NAME: "WebApplication9"
+  IIS_TARGET_PATH: "C:\\inetpub\\wwwroot"
+
+compilation:
+  stage: build
+  script:
+    - .ci/.gitlab-compile.ps1
+  tags:
+    # Permet de définir le(s) Gitlab Runner qui exécutera cette étape.
+    - co2_forge
+  artifacts:
+    when: on_success
+    paths:
+      - build
+    expire_in: 1 week
+
